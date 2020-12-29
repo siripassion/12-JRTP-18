@@ -11,6 +11,7 @@ public class City {
 	public Integer cityId;
 	@Column(name="CITY_NAME")
 	public String cityName;
-	
+	@Column(name="STATE_ID")
+	public Integer stateId;
 
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,19 +44,20 @@ public class UserMgmtServiceImpl implements UserMgmtService{
 	public Map<Integer, String> findStates(Integer countryId) {
 		
 		Map<Integer, String> stateMap = new HashMap<>();
-		List<State> statesList = stateRepository.findAll();
+		List<State> statesList = stateRepository.findByCountryId(countryId);
 		statesList.forEach(state->stateMap.put(state.stateId,state.stateName));	
 		return stateMap;
 	}
+	 
 
 	@Override
 	public Map<Integer, String> findCities(Integer stateId) {
 		Map<Integer, String> cityMap = new HashMap<>();
-		List<City> citiesList = cityRepository.findAll();
+		List<City> citiesList = cityRepository.findByStateId(stateId);
 		citiesList.forEach(city->cityMap.put(city.cityId,city.cityName));
-		return null;
+		return cityMap;
 	}
-	
+
 	@Override
 	public String validateCredentials(String email,String password) {
 		String accStatus = null;
@@ -78,18 +80,47 @@ public class UserMgmtServiceImpl implements UserMgmtService{
 	@Override
 	public Boolean isEmailExists(String emailId) {
 		User user = userMgmtRepository.findByEmail(emailId);
-		return user.getSID()!=null;
+		if(user!=null) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public Boolean saveUserDetails(User user) {
-		if(user!=null && user.getSID()!=null) {
+			user.setPassword(randomPassword());
 			user.setAccountStatus("LOCKED");
 			userMgmtRepository.save(user);
-		}
+
 		return user.getSID()!=null;
 	}
-
+	
+	//To generate randomPassword
+	public String randomPassword() {
+		
+		 String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	     String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+	     String specialCharacters = "!@#$";
+	     String numbers = "1234567890";
+	     
+	     String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+	     // Using random method 
+	        Random rndm = new Random(); 
+	        char[] password = new char[10]; 
+	  
+	        for (int i = 0; i < password.length; i++) 
+	        { 
+	            // Use of charAt() method : to get character value 
+	            // Use of nextInt() as it is scanning the value as int 
+	            
+	        	password[i] = combinedChars.charAt(rndm.nextInt(combinedChars.length())); 
+	  
+	        } 
+	        combinedChars = password.toString();
+	        return combinedChars;
+		
+	}
+	
 	@Override
 	public Boolean isTempPasswordValid(String email,String tmpPwd) {
 		
@@ -115,6 +146,6 @@ public class UserMgmtServiceImpl implements UserMgmtService{
 		}
 		return null;
 	}
-
+	
 	
 }

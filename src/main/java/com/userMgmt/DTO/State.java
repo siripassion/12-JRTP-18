@@ -13,6 +13,8 @@ public class State {
 	public Integer stateId;
 	@Column(name="STATE_NAME")
 	public String stateName;
+	@Column(name="COUNTRY_ID")
+	public Integer countryId;
 	
 //	public List<City> cityList;
 

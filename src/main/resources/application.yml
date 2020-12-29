@@ -11,5 +11,16 @@ spring:
       enabled: true
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
- 
-  
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 
+    password: 
+    properties: 
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls.enable: true
