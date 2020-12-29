@@ -16,7 +16,7 @@ public class EmailRestController {
 	public String sendMail() {
 		String subject = "Test mail";
 		String body="Hello siri";
-		String to = "siripassion2020@gmail.com";
+		String to = "abc@gmail.com";
 		boolean isSent = ems.sendEmail(subject, body, to);
 		if(isSent)
 			return "mail sent successfully";
